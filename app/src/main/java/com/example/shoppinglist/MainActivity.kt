@@ -1,38 +1,44 @@
 package com.example.shoppinglist
 
-import ItemInput
-import SearchInput
-import Title
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.shoppinglist.components.ShoppingList
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.shoppinglist.ui.theme.ShoppingListTheme
-import com.google.android.engage.shopping.datamodel.ShoppingList
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,48 +56,122 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingListApp() {
-    var newItemText by rememberSaveable { mutableStateOf("") }
-    var searchQuery by rememberSaveable { mutableStateOf("") }
-    val shoppingItems = remember { mutableStateListOf<String>() }
+    val navController = rememberNavController()
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
 
-    val filteredItems by remember(searchQuery, shoppingItems) {
-        derivedStateOf {
-            if (searchQuery.isBlank()) {
-                shoppingItems
-            } else {
-                shoppingItems.filter { it.contains(searchQuery,
-                    ignoreCase = true) }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    // 🔹 Drawer + Scaffold
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet {
+                Text(
+                    text = when(currentRoute){
+                        "home" -> "Shopping List"
+                        "profile" -> "Profile"
+                        "setting" -> "Setting"
+                        else -> "Shopping List"
+                    },
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(16.dp)
+                )
+
+                NavigationDrawerItem(
+                    label = { Text("Setting") },
+                    selected = currentRoute == "setting",
+                    onClick = {
+                        navController.navigate("setting")
+                        scope.launch { drawerState.close() }
+                    }
+                )
+            }
+        }
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {Text(
+                        text = when(currentRoute){
+                        "home" -> "Shopping List"
+                        "profile" -> "Profile"
+                        "setting" -> "Setting"
+                        else -> "Shopping List"
+                    },
+                        )},
+                    navigationIcon = {
+                        IconButton(onClick = {scope.launch { drawerState.open() }}) {
+                            Icon(Icons.Default.Menu, contentDescription = "Menu")
+                        }
+                    }
+                )
+            },
+            bottomBar = {
+                NavigationBar {
+                    NavigationBarItem(
+                        selected = currentRoute == "home",
+                        onClick = {navController.navigate("home")},
+                        label = {Text("Home")},
+                        icon = {Icon(Icons.Default.Home, contentDescription = null)}
+                    )
+                    NavigationBarItem(
+                        selected = currentRoute == "profile",
+                        onClick = {navController.navigate("profile")},
+                        label = {Text("Profile")},
+                        icon = {Icon(Icons.Default.Person, contentDescription = null)}
+                    )
+                }
+            }
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = "home",
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                composable("home") { HomeScreen(navController) }
+                composable("profile") { ProfileScreen() }
+                composable("setting") { SettingScreen() }
             }
         }
     }
+}
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(WindowInsets.safeDrawing.asPaddingValues())
-            .padding(horizontal = 16.dp)
-    ) {
-        Title()
-        ItemInput(
-            text = newItemText,
-            onTextChange = { newItemText = it },
-            onAddItem = {
-                if (newItemText.isNotBlank()) {
-                    shoppingItems.add(newItemText)
-                    newItemText = ""
+@Composable
+fun BottomNavigationBar(navController: NavHostController) {
+    val items = listOf(
+        Screen.Home,
+        Screen.Profile,
+        Screen.Setting
+    )
+
+    NavigationBar {
+        val currentDestination = navController.currentBackStackEntryAsState().value?.destination
+        items.forEach { screen ->
+            NavigationBarItem(
+                icon = { Icon(screen.icon, contentDescription = screen.title) },
+                label = { Text(screen.title) },
+                selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                onClick = {
+                    navController.navigate(screen.route) {
+                        popUpTo(navController.graph.startDestinationId)
+                        launchSingleTop = true
+                    }
                 }
-            }
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        SearchInput(
-            query = searchQuery,
-            onQueryChange = { searchQuery = it }
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        ShoppingList(items = filteredItems)
+            )
+        }
     }
+}
+
+// 🔹 Screen data class untuk navigasi bawah
+sealed class Screen(val route: String, val title: String, val icon: androidx.compose.ui.graphics.vector.ImageVector) {
+    object Home : Screen("home", "Home", Icons.Default.Home)
+    object Profile : Screen("profile", "Profile", Icons.Default.Person)
+    object Setting : Screen("setting", "Setting", Icons.Default.Settings)
 }
 
 @Composable

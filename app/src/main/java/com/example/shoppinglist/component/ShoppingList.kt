@@ -1,4 +1,4 @@
-package com.example.shoppinglist.components
+package com.example.shoppinglist.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
@@ -37,7 +37,7 @@ import com.example.shoppinglist.ui.theme.ShoppingListTheme
 import kotlinx.coroutines.delay
 
 @Composable
-fun ShoppingList(items: List<String>) {
+fun HomeScreen(items: List<String>) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -191,12 +191,21 @@ fun ShoppingListItem(item: String) {
 @Preview(showBackground = true)
 @Composable
 fun ShoppingListPreview() {
+    androidx.navigation.compose.rememberNavController()
     ShoppingListTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            ShoppingList(items = listOf("Susu Segar", "Roti Tawar", "Telur Ayam", "Apel Fuji", "Daging Sapi"))
+            HomeScreen(
+                items = listOf(
+                    "Susu Segar",
+                    "Roti Tawar",
+                    "Telur Ayam",
+                    "Apel Fuji",
+                    "Daging Sapi",
+                ),
+            )
         }
     }
 }
