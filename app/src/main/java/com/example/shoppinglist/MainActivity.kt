@@ -40,6 +40,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.shoppinglist.ui.theme.ShoppingListTheme
 import kotlinx.coroutines.launch
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,13 +126,17 @@ fun ShoppingListApp() {
                         label = {Text("Profile")},
                         icon = {Icon(Icons.Default.Person, contentDescription = null)}
                     )
+                    NavigationBarItem(
+                        selected = currentRoute == "setting",
+                        onClick = {navController.navigate("setting")},
+                        label = {Text("Setting")},
+                        icon = {Icon(Icons.Default.Settings, contentDescription = null)}
+                    )
                 }
             }
         ) { innerPadding ->
             NavHost(
-                navController = navController,
-                startDestination = "home",
-                modifier = Modifier.padding(innerPadding)
+                navController, "home", Modifier.padding(innerPadding)
             ) {
                 composable("home") { HomeScreen(navController) }
                 composable("profile") { ProfileScreen() }
@@ -174,18 +179,12 @@ sealed class Screen(val route: String, val title: String, val icon: androidx.com
     object Setting : Screen("setting", "Setting", Icons.Default.Settings)
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun ShoppingListPreview() {
     ShoppingListTheme {
-        Greeting("Android")
+        ShoppingListApp()
     }
 }

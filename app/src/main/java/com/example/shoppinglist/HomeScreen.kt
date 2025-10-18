@@ -20,9 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.shoppinglist.component.HomeScreen
+import com.example.shoppinglist.ui.theme.ShoppingListTheme
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -65,4 +67,12 @@ Column(
     Spacer(modifier = Modifier.height(16.dp))
     HomeScreen(items = filteredItems)
 }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    ShoppingListTheme {
+        ShoppingListApp()
+    }
 }

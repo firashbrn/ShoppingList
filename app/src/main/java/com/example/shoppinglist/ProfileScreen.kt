@@ -1,23 +1,42 @@
 package com.example.shoppinglist
 
+
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.ManageAccounts
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.shoppinglist.ui.theme.ShoppingListTheme
 
 @Composable
 fun ProfileScreen() {
@@ -27,28 +46,234 @@ fun ProfileScreen() {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(16.dp))
         Image(
             painter = painterResource(id = R.drawable.foto_diri),
             contentDescription = "Foto Diri",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(150.dp)
-                .padding(8.dp)
+                .size(170.dp)
+                .clip(CircleShape)
+                .shadow(elevation = 8.dp, shape = CircleShape)
         )
-
         Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Magfira Shabrina",
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.Bold,
+                fontSize = 22.sp
+            ),
+            color = Color(0xFF240B41)
 
-        Card(
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(modifier = Modifier.height(2.dp))
+        Text(
+            text = "Mahasiswi Sistem Informasi",
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.Medium,
+                fontSize = 11.sp,
+            ),
+            color = Color(color = 0xFFC58CB5)
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Column(
+            modifier = Modifier.fillMaxSize().padding(all = 15.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text("Nama: Magfira Shabrina", fontWeight = FontWeight.Bold)
-                Text("NIM: 2311522013")
-                Text("Hobi: Membaca")
-                Text("TTL: Bukittinggi, 27 Maret 2005")
-                Text("Peminatan: Mobile Programing")
+            Surface(
+                modifier = Modifier.fillMaxWidth().height(50.dp),
+                color = Color(0xFFC58CB5),
+                shape = MaterialTheme.shapes.extraLarge
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Surface(
+                            modifier = Modifier.fillMaxHeight().width(50.dp),
+                            shape = MaterialTheme.shapes.extraLarge,
+                            color = Color(0xFFC0E5FF)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ManageAccounts,
+                                contentDescription = null,
+                                Modifier.size(20.dp).padding(13.dp),
+                                tint = Color(0xFFC58CB5)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(
+                            text = "My Account",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 15.sp,
+                            ),
+                            color = Color(0xFF852F6A)
+                        )
+
+                        Spacer(modifier = Modifier.width(16.dp))
+
+                    }
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowRight,
+                        contentDescription = null,
+                        Modifier.size(50.dp).padding(13.dp),
+                        tint = Color(0xFF240B41),
+
+                        )
+
+
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Surface(
+                modifier = Modifier.fillMaxWidth().height(50.dp),
+                color = Color(0xFFC58CB5),
+                shape = MaterialTheme.shapes.extraLarge
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Surface(
+                            modifier = Modifier.fillMaxHeight().width(50.dp),
+                            shape = MaterialTheme.shapes.extraLarge,
+                            color = Color(0xFFC0E5FF)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Email,
+                                contentDescription = null,
+                                Modifier.size(20.dp).padding(13.dp),
+                                tint = Color(0xFFC58CB5)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(
+                            text = "Email Address",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 15.sp,
+                            ),
+                            color = Color(0xFF852F6A)
+                        )
+
+                        Spacer(modifier = Modifier.width(16.dp))
+
+                    }
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowRight,
+                        contentDescription = null,
+                        Modifier.size(50.dp).padding(13.dp),
+                        tint = Color(0xFF240B41),
+
+                        )
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Surface(
+                modifier = Modifier.fillMaxWidth().height(50.dp),
+                color = Color(0xFFC58CB5),
+                shape = MaterialTheme.shapes.extraLarge
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Surface(
+                            modifier = Modifier.fillMaxHeight().width(50.dp),
+                            shape = MaterialTheme.shapes.extraLarge,
+                            color = Color(0xFFC0E5FF)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Phone,
+                                contentDescription = null,
+                                Modifier.size(20.dp).padding(13.dp),
+                                tint = Color(0xFFC58CB5)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(
+                            text = "Phone Number",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 15.sp,
+                            ),
+                            color = Color(0xFF852F6A)
+                        )
+
+                        Spacer(modifier = Modifier.width(16.dp))
+
+                    }
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowRight,
+                        contentDescription = null,
+                        Modifier.size(50.dp).padding(13.dp),
+                        tint = Color(0xFF240B41),
+
+                        )
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Surface(
+                modifier = Modifier.fillMaxWidth().height(50.dp),
+                color = Color(0xFFC58CB5),
+                shape = MaterialTheme.shapes.extraLarge
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Surface(
+                            modifier = Modifier.fillMaxHeight().width(50.dp),
+                            shape = MaterialTheme.shapes.extraLarge,
+                            color = Color(0xFFC0E5FF)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Lock,
+                                contentDescription = null,
+                                Modifier.size(20.dp).padding(13.dp),
+                                tint = Color(0xFFC58CB5)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(
+                            text = "Change Password",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 15.sp,
+                            ),
+                            color = Color(0xFF852F6A)
+                        )
+
+                        Spacer(modifier = Modifier.width(16.dp))
+
+                    }
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowRight,
+                        contentDescription = null,
+                        Modifier.size(50.dp).padding(13.dp),
+                        tint = Color(0xFF240B41),
+
+                        )
+                }
             }
         }
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun ProfielScreenPreview() {
+    ShoppingListTheme {
+        ProfileScreen()
     }
 }
