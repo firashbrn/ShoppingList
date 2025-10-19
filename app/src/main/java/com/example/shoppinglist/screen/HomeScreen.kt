@@ -1,4 +1,4 @@
-package com.example.shoppinglist
+package com.example.shoppinglist.screen
 
 import ItemInput
 import SearchInput
@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.shoppinglist.ShoppingListApp
 import com.example.shoppinglist.component.HomeScreen
 import com.example.shoppinglist.ui.theme.ShoppingListTheme
 

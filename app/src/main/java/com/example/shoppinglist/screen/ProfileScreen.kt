@@ -1,4 +1,4 @@
-package com.example.shoppinglist
+package com.example.shoppinglist.screen
 
 
 import androidx.compose.foundation.Image
@@ -15,16 +15,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.ManageAccounts
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,10 +37,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.shoppinglist.R
 import com.example.shoppinglist.ui.theme.ShoppingListTheme
+import com.example.shoppinglist.viewModel.ProfileViewModel
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    viewModel:  ProfileViewModel = viewModel(),
+    navigateToEdit: () -> Unit
+) {
+    val currentName by viewModel.name
+    val currentDescrition by viewModel.description
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -58,7 +68,7 @@ fun ProfileScreen() {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Magfira Shabrina",
+            text = currentName,
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.Bold,
                 fontSize = 22.sp
@@ -68,7 +78,7 @@ fun ProfileScreen() {
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
-            text = "Mahasiswi Sistem Informasi",
+            text = currentDescrition,
             style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.Medium,
                 fontSize = 11.sp,
@@ -94,10 +104,11 @@ fun ProfileScreen() {
                         Surface(
                             modifier = Modifier.fillMaxHeight().width(50.dp),
                             shape = MaterialTheme.shapes.extraLarge,
-                            color = Color(0xFFC0E5FF)
+                            color = Color(0xFFC0E5FF),
+                            onClick = navigateToEdit
                         ) {
                             Icon(
-                                imageVector = Icons.Default.ManageAccounts,
+                                imageVector = Icons.Default.Edit,
                                 contentDescription = null,
                                 Modifier.size(20.dp).padding(13.dp),
                                 tint = Color(0xFFC58CB5)
@@ -105,7 +116,7 @@ fun ProfileScreen() {
                         }
                         Spacer(modifier = Modifier.width(16.dp))
                         Text(
-                            text = "My Account",
+                            text = "Edit Profil",
                             style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 15.sp,
@@ -121,10 +132,7 @@ fun ProfileScreen() {
                         contentDescription = null,
                         Modifier.size(50.dp).padding(13.dp),
                         tint = Color(0xFF240B41),
-
                         )
-
-
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -274,6 +282,8 @@ fun ProfileScreen() {
 @Composable
 fun ProfielScreenPreview() {
     ShoppingListTheme {
-        ProfileScreen()
+        ProfileScreen(
+            navigateToEdit = {}
+        )
     }
 }

@@ -31,13 +31,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.ActivityNavigator
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.shoppinglist.screen.EditProfileScreen
+import com.example.shoppinglist.screen.HomeScreen
+import com.example.shoppinglist.screen.ProfileScreen
+import com.example.shoppinglist.screen.SettingScreen
 import com.example.shoppinglist.ui.theme.ShoppingListTheme
+import com.example.shoppinglist.viewModel.ProfileViewModel
 import kotlinx.coroutines.launch
 
 
@@ -57,6 +64,9 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+object Destinations {
+    const val EDIT_PROFILE = "edit_profile"
+}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingListApp() {
@@ -66,6 +76,8 @@ fun ShoppingListApp() {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+
+    val profileViewModel: ProfileViewModel = viewModel ()
 
     // 🔹 Drawer + Scaffold
     ModalNavigationDrawer(
@@ -136,11 +148,19 @@ fun ShoppingListApp() {
             }
         ) { innerPadding ->
             NavHost(
-                navController, "home", Modifier.padding(innerPadding)
+                navController = navController, startDestination = "home", Modifier.padding(innerPadding)
             ) {
                 composable("home") { HomeScreen(navController) }
-                composable("profile") { ProfileScreen() }
+                composable("profile") { ProfileScreen(
+                    viewModel = profileViewModel,
+                    navigateToEdit = {
+                        navController.navigate(Destinations.EDIT_PROFILE)
+                    }) }
                 composable("setting") { SettingScreen() }
+                composable(Destinations.EDIT_PROFILE){EditProfileScreen (
+                    viewModel = profileViewModel,
+                    onNavigateBack = {navController.popBackStack()}
+                )}
             }
         }
     }

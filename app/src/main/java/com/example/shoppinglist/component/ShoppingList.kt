@@ -191,7 +191,6 @@ fun ShoppingListItem(item: String) {
 @Preview(showBackground = true)
 @Composable
 fun ShoppingListPreview() {
-    androidx.navigation.compose.rememberNavController()
     ShoppingListTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
