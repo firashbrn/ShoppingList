@@ -3,6 +3,10 @@ package com.example.shoppinglist
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -29,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -116,10 +121,13 @@ fun ShoppingListApp() {
                         "setting" -> "Setting"
                         else -> "Shopping List"
                     },
+                        color = Color(0xFF852F6A)
                         )},
                     navigationIcon = {
                         IconButton(onClick = {scope.launch { drawerState.open() }}) {
-                            Icon(Icons.Default.Menu, contentDescription = "Menu")
+                            Icon(Icons.Default.Menu,
+                                contentDescription = "Menu",
+                                tint = Color(0xFF852F6A))
                         }
                     }
                 )
@@ -130,19 +138,25 @@ fun ShoppingListApp() {
                         selected = currentRoute == "home",
                         onClick = {navController.navigate("home")},
                         label = {Text("Home")},
-                        icon = {Icon(Icons.Default.Home, contentDescription = null)}
+                        icon = {Icon(Icons.Default.Home,
+                            contentDescription = null,
+                            tint = Color(0xFF852F6A))}
                     )
                     NavigationBarItem(
                         selected = currentRoute == "profile",
                         onClick = {navController.navigate("profile")},
                         label = {Text("Profile")},
-                        icon = {Icon(Icons.Default.Person, contentDescription = null)}
+                        icon = {Icon(Icons.Default.Person,
+                            contentDescription = null,
+                            tint = Color(0xFF852F6A))}
                     )
                     NavigationBarItem(
                         selected = currentRoute == "setting",
                         onClick = {navController.navigate("setting")},
                         label = {Text("Setting")},
-                        icon = {Icon(Icons.Default.Settings, contentDescription = null)}
+                        icon = {Icon(Icons.Default.Settings,
+                            contentDescription = null,
+                            tint = Color(0xFF852F6A))}
                     )
                 }
             }
@@ -151,13 +165,33 @@ fun ShoppingListApp() {
                 navController = navController, startDestination = "home", Modifier.padding(innerPadding)
             ) {
                 composable("home") { HomeScreen(navController) }
-                composable("profile") { ProfileScreen(
+                composable("profile",
+                    enterTransition ={ fadeIn(animationSpec = tween (700)) },
+                    exitTransition = { fadeOut(animationSpec = tween (700)) }) { ProfileScreen(
                     viewModel = profileViewModel,
                     navigateToEdit = {
                         navController.navigate(Destinations.EDIT_PROFILE)
                     }) }
-                composable("setting") { SettingScreen() }
-                composable(Destinations.EDIT_PROFILE){EditProfileScreen (
+                composable("setting",
+                    enterTransition ={ fadeIn(animationSpec = tween (700)) },
+                    exitTransition = { fadeOut(animationSpec = tween (700)) }) { SettingScreen() }
+                composable(Destinations.EDIT_PROFILE,
+                    enterTransition = {slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween (500)
+                    ) },
+                    exitTransition = {slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(500)
+                    )},
+                    popExitTransition = {slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(500)
+                    )},
+                    popEnterTransition = {slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(500)
+                    )}){EditProfileScreen (
                     viewModel = profileViewModel,
                     onNavigateBack = {navController.popBackStack()}
                 )}

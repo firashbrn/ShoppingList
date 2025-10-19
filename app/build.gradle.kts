@@ -55,6 +55,8 @@ dependencies {
     implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.material.icons.extended)
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.animation:animation-core:1.6.8")
+    implementation("androidx.compose.animation:animation:1.6.8")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

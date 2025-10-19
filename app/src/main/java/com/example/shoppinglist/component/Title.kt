@@ -4,6 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -16,8 +17,8 @@ fun Title() {
         style = MaterialTheme.typography.headlineLarge.copy(
             fontWeight = FontWeight.Bold,
             fontSize = 32.sp,
-            color = MaterialTheme.colorScheme.primary
         ),
+        color = Color(0xFF852F6A),
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp),
